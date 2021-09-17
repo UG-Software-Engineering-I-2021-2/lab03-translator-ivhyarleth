@@ -7,22 +7,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class Translator {
-    // TODO: If you have your own Premium account credentials, put them down here:
+    private Translator(){
+        throw new IllegalStateException("Utility class");
+    }
     private static final String CLIENT_ID = "FREE_TRIAL_ACCOUNT";
     private static final String CLIENT_SECRET = "PUBLIC_SECRET";
     private static final String ENDPOINT = "http://api.whatsmate.net/v1/translation/translate";
-    public Translator(){}
 
-    public static void main(String[] args) {
-         //TODO: Specify your translation requirements here:
-        String fromLang = "en";
-        String toLang = "es";
-        String text = "Let's have some fun!";
-        //Translator.translate(fromLang, toLang, text);
-    }
-
-    public static String translate(String fromLang, String toLang, String text) throws Exception {
-        // TODO: Should have used a 3rd party library to make a JSON string from an object
+    public static String translate(String fromLang, String toLang, String text) throws IOException {
         if(text.length() >= 500 ||text.length() == 0) {
             throw new IOException("Se excedio con el numero de caracteres");
         }
@@ -47,15 +39,13 @@ public class Translator {
                 (statusCode == 200) ? conn.getInputStream() : conn.getErrorStream()
         ));
         String output;
-        //StringBuilder textTranslated = new StringBuilder();
+        StringBuilder textTranslated = new StringBuilder();
 
         while ((output = br.readLine()) != null) {
-            System.out.println(output);
-            //textTranslated.append(output);
+            textTranslated.append(output);
         }
         conn.disconnect();
-        //return textTranslated.toString();
-        return output;
+        return textTranslated.toString();
     }
 
     public static String buildJsonPayLoad(String fromLang, String toLang, String text) {
